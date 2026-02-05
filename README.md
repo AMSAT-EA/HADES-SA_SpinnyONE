@@ -5,6 +5,9 @@ The program accepts as a parameter a file containing an already descrambled and 
 Some sample TXT packet files are included. The Linux and Windows (.exe) binaries are provided together with the source code.
 For any questions, please contact us at contacto@amsat-ea.org
 
+<img width="1772" height="523" alt="image" src="https://github.com/user-attachments/assets/a3b9a1f1-9673-4c39-9c81-fc06d6d5413f" />
+
+
 /*************************************************************************************/
 /*                                                                                   */
 /* License information / Informacion de licencia                                     */
