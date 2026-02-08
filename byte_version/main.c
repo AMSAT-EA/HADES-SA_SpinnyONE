@@ -42,6 +42,10 @@
 #define TEMP_BUFFER_SIZE 1024
 #define PN9_RAW_DATA_SIZE 248
 
+#define EPHEMERIS_PACKET_HEADER_SIZE 19 // 16 training + 2 sync + 1 size
+#define SSDV_PACKET_HEADER_SIZE   5 // 1 training + 1 ssdv type + 2 sync + 1 size
+#define CODEC2_PACKET_HEADER_SIZE 3 // 2 sync + 1 size
+
 const char name[MAXINA][5]={"SPA ","SPB ","SPC ","SPD ","SUN ","BAT ","BATP","BATN","CPU ","PL  ","SIM "};
 
 FILE * f;
@@ -67,7 +71,7 @@ int main(int argc, char * argv[]) {
         printf("*                                                  *\n");
         printf("* HADES-SA (SpinnyONE) Satellite Telemetry Decoder *\n");
         printf("*           AMSAT EA - Free distribution           *\n");
-        printf("*               Version 1.00 (Bytes)               *\n");
+        printf("*               Version 1.02 (Bytes)               *\n");
         printf("*            Compilation : %10s             *\n",__DATE__);
         printf("*                                                  *\n");
         printf("****************************************************\n");
@@ -1381,7 +1385,7 @@ void procesar(char * file_name) {
 	case 10: // ssdv
 
              	memset(&ssdv, 0, sizeof(ssdv));
-             	memcpy((void*)&ssdv+5, (void*)RX_buffer, telemetry_size);
+             	memcpy((void*)&ssdv+SSDV_PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);
 
 		uint16_t packetID  = (ssdv.packetID >> 8) | (ssdv.packetID << 8);
     		uint8_t imageID    = ssdv.imageID;
@@ -1398,11 +1402,11 @@ void procesar(char * file_name) {
                 // indicamos el orden en que se ha recibido este frame y el numero de frame que viene en el paquete
 
                 memset(&codec2, 0, sizeof(codec2));
-                memcpy((void*)&codec2+PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);
+                memcpy((void*)&codec2+CODEC2_PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);
 
                 sprintf(name_tlm_con_fecha, "%s_sat_%02d_type_%02d_codec2_frame_%03d.tlm", fecha_fichero, source, type, codec2.frame_number);
                 sprintf(name_tlm_sin_fecha, "sat_%02d_type_%02d_codec2_frame_%03d.tlm", source, type, codec2.frame_number);
-                sprintf(name_dat,           "%s_sat_%02d_type_%02d_codec2_frame_%03d.bin", fecha_fichero, source, type, codec2.frame_number);
+                sprintf(name_dat,           "sat_%02d_type_%02d_codec2_frame_%03d.bin", source, type, codec2.frame_number);
 
                 break;
 
@@ -1437,7 +1441,7 @@ void procesar(char * file_name) {
 
    }
 
-   f_dat=fopen(name_dat,"a+");
+   if (type != 11) f_dat=fopen(name_dat,"a+"); else f_dat=fopen(name_dat,"w+");
 
    if (f_dat == NULL) {
 
@@ -1493,19 +1497,19 @@ void procesar(char * file_name) {
 
         case 10:
                 memset(&ssdv, 0, sizeof(ssdv));
-                memcpy((void*)&ssdv+5, (void*)RX_buffer, telemetry_size);
+                memcpy((void*)&ssdv+SSDV_PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);
                 visualiza_ssdv(source, &ssdv);
         break;
 
 	case 11:
 		memset(&codec2, 0, sizeof(codec2));
-		memcpy((void*)&codec2+PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);
+		memcpy((void*)&codec2+CODEC2_PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);
 		visualiza_codec2(source, &codec2);
 	break;
 
 	case 12:
                 memset(&efemeridesp, 0, sizeof(efemeridesp));
-                memcpy((void*)&efemeridesp + PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);  
+                memcpy((void*)&efemeridesp + EPHEMERIS_PACKET_HEADER_SIZE, (void*)RX_buffer, telemetry_size);  
                 visualiza_efemeridespacket(source, &efemeridesp);
 	break;
 
