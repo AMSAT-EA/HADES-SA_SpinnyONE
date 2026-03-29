@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
         printf("*                                                  *\n");
         printf("* HADES-SA (SpinnyONE) Satellite Telemetry Decoder *\n");
         printf("*           AMSAT EA - Free distribution           *\n");
-        printf("*               Version 1.03 (Bytes)               *\n");
+        printf("*               Version 1.04 (Bytes)               *\n");
         printf("*            Compilation : %10s             *\n",__DATE__);
         printf("*                                                  *\n");
         printf("****************************************************\n");
@@ -1441,7 +1441,7 @@ void procesar(char * file_name) {
 
    }
 
-   if (type!= 10 && type != 11) f_dat=fopen(name_dat,"a+"); else f_dat=fopen(name_dat,"w+");
+   if (type!= 10 && type != 11) f_dat=fopen(name_dat,"ab+"); else f_dat=fopen(name_dat,"wb+");
 
    if (f_dat == NULL) {
 
