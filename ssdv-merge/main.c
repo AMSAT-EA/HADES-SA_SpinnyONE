@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) {
         printf("*                                                           *\n");
         printf("* SSDV frame merging for the HADES-SA (SpinnyONE) satellite *\n");
         printf("*               AMSAT EA - Free distribution                *\n");
-        printf("*                       Version 1.05                        *\n");
+        printf("*                       Version 1.06                        *\n");
         printf("*                  Compiled : %10s                   *\n",__DATE__);
         printf("*                                                           *\n");
         printf("*************************************************************\n");
@@ -48,8 +48,8 @@ int main(int argc, char * argv[]) {
 
         if (argc != 3) {
                
-		printf("Please execute %s  input_list_file ssv_output_file\n\n", argv[0]);
-                printf("The input_list_file must contain the file list to process, each in one line. Check input_sample.txt\n\n");
+		printf("Please execute %s input_list_file ssv_output_file\n\n", argv[0]);
+                printf("The input_list_file must contain the file list to process, each in one line. Check ssdv_input_sample.txt\n\n");
                 return -1;
         
         }
